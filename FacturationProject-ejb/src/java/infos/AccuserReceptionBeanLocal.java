@@ -14,5 +14,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface AccuserReceptionBeanLocal {
-        public void sendOrder(Serializable facturation);
+        public void sendOrder(Object obj);
 }

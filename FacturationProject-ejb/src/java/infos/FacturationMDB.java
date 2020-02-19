@@ -5,6 +5,7 @@
  */
 package infos;
 
+import jms.Facturation;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +26,7 @@ import javax.jms.MessageListener;
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/FacturationQueue")
+    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/FactureQueue")
 })
 public class FacturationMDB implements MessageListener {
     @EJB(name="AccuserReceptionBean")
@@ -37,15 +38,16 @@ public class FacturationMDB implements MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            String test = message.getBody(String.class);
-            processFacturation(test);
+            message.acknowledge();
+            Object obj = message.getBody(Object.class);
+            processFacturation(obj);
         } catch (JMSException jmse) {
             jmse.printStackTrace();
             context.setRollbackOnly();
         }
     }
     
-    public void processFacturation(String object) {
-        accuserRecep.sendOrder(object);
+    public void processFacturation(Object obj) {
+        accuserRecep.sendOrder(obj);
     }
 }

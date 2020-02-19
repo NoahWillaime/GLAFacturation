@@ -26,7 +26,7 @@ public class AccuserReceptionBean implements AccuserReceptionBeanLocal{
     Destination RecepQueue;
     
     @Override
-    public void sendOrder(Serializable facture) {
-        context.createProducer().send(RecepQueue, facture);
+    public void sendOrder(Object obj) {
+        context.createProducer().send(RecepQueue, (Serializable)obj);
     }
 }
